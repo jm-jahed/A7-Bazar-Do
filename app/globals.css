@@ -187,3 +187,34 @@ body {
   padding: 0.2rem 0.6rem;
   border-radius: 9999px;
 }
+
+/* ==========================================================================
+   Price Ticker / Marquee Animation
+   Smooth continuous scroll from right to left with pause on hover.
+   ========================================================================== */
+
+@keyframes tickerMarquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: tickerMarquee 40s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+    overflow-x: auto;
+  }
+}
