@@ -1,7 +1,7 @@
 // ============================================================================
 // Utility Functions for Bazar Dor (বাজার দর)
 // Contains helper functions for Bengali number conversion, price formatting,
-// and unit localization.
+// unit localization, and dynamic Bengali date formatting.
 // ============================================================================
 
 // Mapping from English digits (0-9) to Bengali digits (০-৯)
@@ -17,6 +17,33 @@ const BANGLA_DIGITS: Record<string, string> = {
   "8": "৮",
   "9": "৯",
 };
+
+// Bengali month names in order (0-indexed matching JavaScript Date.getMonth())
+export const BANGLA_MONTHS: string[] = [
+  "জানুয়ারি",
+  "ফেব্রুয়ারি",
+  "মার্চ",
+  "এপ্রিল",
+  "মে",
+  "জুন",
+  "জুলাই",
+  "আগস্ট",
+  "সেপ্টেম্বর",
+  "অক্টোবর",
+  "নভেম্বর",
+  "ডিসেম্বর",
+];
+
+// Bengali weekday names
+export const BANGLA_DAYS: string[] = [
+  "রবিবার",
+  "সোমবার",
+  "মঙ্গলবার",
+  "বুধবার",
+  "বৃহস্পতিবার",
+  "শুক্রবার",
+  "শনিবার",
+];
 
 /**
  * Converts English numbers/digits to Bengali numbers.
@@ -87,4 +114,21 @@ export function formatPriceChange(pct: number, dir: "up" | "down" | "flat" = "fl
     return `▼ ${banglaPct}%`;
   }
   return `— ${banglaPct}%`;
+}
+
+/**
+ * Generates the formatted Bengali date for the given Date object (or current time).
+ * Example: Date(2026-10-09) -> "৯ অক্টোবর ২০২৬" or "শুক্রবার, ৯ অক্টোবর ২০২৬"
+ */
+export function getBanglaDate(dateInput?: Date, includeDayName = false): string {
+  const date = dateInput || new Date();
+  const day = toBanglaNumber(date.getDate());
+  const month = BANGLA_MONTHS[date.getMonth()];
+  const year = toBanglaNumber(date.getFullYear());
+  const dayName = BANGLA_DAYS[date.getDay()];
+
+  if (includeDayName) {
+    return `${dayName}, ${day} ${month} ${year}`;
+  }
+  return `${day} ${month} ${year}`;
 }
