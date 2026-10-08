@@ -105,7 +105,8 @@ export function formatUnitBn(unit: string | null | undefined): string {
  * (0.0, "flat") -> "— ০.০%"
  */
 export function formatPriceChange(pct: number, dir: "up" | "down" | "flat" = "flat"): string {
-  const banglaPct = toBanglaNumber(pct.toFixed(1));
+  const absPct = Math.abs(pct);
+  const banglaPct = toBanglaNumber(absPct.toFixed(1));
   
   if (dir === "up") {
     return `▲ ${banglaPct}%`;
