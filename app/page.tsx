@@ -1,89 +1,96 @@
-import { toBanglaNumber, formatPrice } from "@/lib/utils";
+"use client";
+
+import React, { useState } from "react";
+import LoadingState from "@/components/ui/LoadingState";
+import ErrorState from "@/components/ui/ErrorState";
+import EmptyState from "@/components/ui/EmptyState";
+import ProductCardSkeleton from "@/components/ui/ProductCardSkeleton";
+import CategorySkeleton from "@/components/ui/CategorySkeleton";
 
 // ============================================================================
-// Visual Foundation Test Page (Step 3)
-// This temporary page verifies the global typography, responsive container,
-// Bengali numerals, and price badge color system.
+// Step 4 UI State & Skeleton Verification Page (Temporary Test)
+// This page demonstrates and verifies the reusable loading, error, empty,
+// and skeleton state components matching the Bazar Dor design language.
 // ============================================================================
 
 export default function Home() {
+  const [retryMessage, setRetryMessage] = useState<string | null>(null);
+
+  const handleRetry = () => {
+    setRetryMessage("পুনরায় ডেটা লোড করার চেষ্টা করা হচ্ছে...");
+    setTimeout(() => {
+      setRetryMessage("পুনরায় চেষ্টা সফল হয়েছে!");
+    }, 1000);
+  };
+
   return (
-    <main className="flex-1 py-12">
-      <div className="container-custom">
-        {/* Section Heading & Subtitle */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-block text-4xl mb-3">🛒</div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-3">
-            বাজার দর (Bazar Dor)
+    <main className="min-h-screen py-10 bg-slate-50">
+      <div className="container-custom space-y-12">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto">
+          <span className="inline-block text-3xl mb-2">🛒</span>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
+            স্টেপ ৪ — UI State & Skeleton Components Test
           </h1>
-          <p className="text-base sm:text-lg text-slate-600">
-            নিত্যপ্রয়োজনীয় পণ্যের আজকের বাজারদর এক নজরে দেখুন।
+          <p className="text-sm sm:text-base text-slate-600">
+            রিসোর্স ও রেফারেন্স ডিজাইনের সাথে মিল রেখে তৈরি করা লোডিং, এরর, এম্পটি এবং স্কেলিটন কম্পোনেন্ট।
           </p>
         </div>
 
-        {/* Foundation Verification Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto mb-10">
-          {/* Rise Card */}
-          <div className="bazar-card p-5">
-            <div className="text-2xl mb-2">🍚</div>
-            <h3 className="font-bold text-slate-900 text-lg mb-1">
-              স্বর্ণমাছি চাল
-            </h3>
-            <p className="text-sm text-slate-500 mb-3">প্রতি কেজি</p>
-            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-              <span className="font-bold text-slate-900">
-                {formatPrice(148)}
-              </span>
-              <span className="badge-rise">
-                ▲ {toBanglaNumber("২.১")}%
-              </span>
-            </div>
-          </div>
+        {/* 1. Category Skeleton Preview */}
+        <section className="bg-white p-6 rounded-2xl border border-slate-200">
+          <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <span>🏷️</span> ১. ক্যাটাগরি স্কেলিটন (Category Skeleton)
+          </h2>
+          <CategorySkeleton count={8} />
+        </section>
 
-          {/* Fall Card */}
-          <div className="bazar-card p-5">
-            <div className="text-2xl mb-2">🥔</div>
-            <h3 className="font-bold text-slate-900 text-lg mb-1">
-              দেশি গোল আলু
-            </h3>
-            <p className="text-sm text-slate-500 mb-3">প্রতি কেজি</p>
-            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-              <span className="font-bold text-slate-900">
-                {formatPrice(35)}
-              </span>
-              <span className="badge-fall">
-                ▼ {toBanglaNumber("২.৯")}%
-              </span>
-            </div>
-          </div>
+        {/* 2. Product Card Skeletons Preview */}
+        <section className="bg-white p-6 rounded-2xl border border-slate-200">
+          <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <span>📦</span> ২. প্রোডাক্ট কার্ড স্কেলিটন (Product Card Skeletons)
+          </h2>
+          <ProductCardSkeleton count={4} />
+        </section>
 
-          {/* Flat Card */}
-          <div className="bazar-card p-5">
-            <div className="text-2xl mb-2">🫙</div>
-            <h3 className="font-bold text-slate-900 text-lg mb-1">
-              সয়াবিন তেল
-            </h3>
-            <p className="text-sm text-slate-500 mb-3">প্রতি লিটার</p>
-            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-              <span className="font-bold text-slate-900">
-                {formatPrice(185)}
-              </span>
-              <span className="badge-flat">
-                — {toBanglaNumber("০.০")}%
-              </span>
-            </div>
-          </div>
-        </div>
+        {/* 3. Loading State Preview */}
+        <section className="bg-white p-6 rounded-2xl border border-slate-200">
+          <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <span>⏳</span> ৩. লোডিং স্টেট (Loading State)
+          </h2>
+          <LoadingState message="বাজারের সর্বশেষ দর লোড হচ্ছে..." />
+        </section>
 
-        {/* Buttons / Accessibility check */}
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <button type="button" className="btn-primary">
-            সব পণ্য দেখুন
-          </button>
-          <button type="button" className="btn-outline">
-            ক্যাটাগরি ব্রাউজ করুন
-          </button>
-        </div>
+        {/* 4. Error State Preview */}
+        <section className="bg-white p-6 rounded-2xl border border-slate-200">
+          <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <span>⚠️</span> ৪. এরর স্টেট (Error State with Retry Action)
+          </h2>
+          <ErrorState
+            title="দুঃখিত, তথ্য লোড করা যাচ্ছে না।"
+            description="সার্ভারের সাথে সংযোগ স্থাপন করা সম্ভব হয়নি। অনুগ্রহ করে ইন্টারনেট সংযোগ পরীক্ষা করুন।"
+            onRetry={handleRetry}
+            retryText="পুনরায় চেষ্টা করুন"
+          />
+          {retryMessage && (
+            <p className="text-center text-sm font-semibold text-emerald-600 mt-2">
+              {retryMessage}
+            </p>
+          )}
+        </section>
+
+        {/* 5. Empty State Preview */}
+        <section className="bg-white p-6 rounded-2xl border border-slate-200">
+          <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <span>📭</span> ৫. এম্পটি স্টেট (Empty State)
+          </h2>
+          <EmptyState
+            title="কোনো পণ্য পাওয়া যায়নি"
+            description="আপনার নির্বাচিত ক্যাটাগরিতে বর্তমানে কোনো পণ্য তালিকাভুক্ত নেই।"
+            actionText="হোম পেজে ফিরে যান"
+            actionHref="/"
+          />
+        </section>
       </div>
     </main>
   );
