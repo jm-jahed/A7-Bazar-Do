@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Bengali } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
+import CategoryNav from "@/components/layout/CategoryNav";
 import "./globals.css";
 
 // Load Google Noto Sans Bengali font for clean, readable Bengali and English typography
@@ -30,6 +31,9 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased">
         {/* Global Navbar */}
         <Navbar />
+
+        {/* Global Category Navigation Bar */}
+        <CategoryNav />
 
         {/* Page Content */}
         <div className="flex-1 flex flex-col">{children}</div>
