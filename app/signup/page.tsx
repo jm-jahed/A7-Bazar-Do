@@ -91,8 +91,8 @@ function SignUpForm() {
         return;
       }
 
-      toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে! স্বাগতম।");
-      router.push(callbackURL);
+      toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে! অনুগ্রহ করে লগইন করুন।");
+      router.push("/signin");
       router.refresh();
     } catch (err: unknown) {
       const errMsg =
