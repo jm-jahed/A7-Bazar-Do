@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Bengali } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/layout/Navbar";
 import CategoryNav from "@/components/layout/CategoryNav";
 import PriceTicker from "@/components/layout/PriceTicker";
@@ -30,6 +31,9 @@ export default function RootLayout({
   return (
     <html lang="bn" className={notoSansBengali.variable}>
       <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased">
+        {/* Global Toast Notifications */}
+        <Toaster position="top-center" toastOptions={{ duration: 3500 }} />
+
         {/* Global Header Navigation Structure */}
         <Navbar />
         <CategoryNav />
