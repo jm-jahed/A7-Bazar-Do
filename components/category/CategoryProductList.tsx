@@ -48,31 +48,42 @@ export default function CategoryProductList({
   }, [products, sortOption]);
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* ====================================================================
-          1. Category Page Header: Icon, Name, Count & Sort Control
+          1. Category Page Header Card (Figma Matched)
          ==================================================================== */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 pb-4 border-b border-slate-200/80">
-        <div>
-          <div className="flex items-center gap-2.5 mb-1">
-            <span className="text-2xl sm:text-3xl" role="img" aria-label={category.nameBn}>
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] p-6 sm:p-8">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-50 border border-slate-100/80 flex items-center justify-center text-2xl sm:text-3xl shrink-0 shadow-2xs">
+            <span role="img" aria-label={category.nameBn}>
               {category.icon}
             </span>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 leading-tight">
               {category.nameBn}
             </h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 leading-none">
+              প্রতি পণ্যের আজকের দাম ও পরিবর্তন
+            </p>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500">
-            {toBanglaNumber(products.length)}টি নিত্যপণ্যের আজকের বাজার দর
-          </p>
         </div>
+      </div>
+
+      {/* ====================================================================
+          2. Count & Sort Controls Bar
+         ==================================================================== */}
+      <div className="flex items-center justify-between gap-4 pt-1">
+        <p className="text-xs sm:text-sm text-slate-500 font-medium">
+          মোট {toBanglaNumber(products.length)}টি পণ্য দেখানো হচ্ছে
+        </p>
 
         {/* Sort Control Dropdown */}
         {products.length > 0 && (
-          <div className="flex items-center gap-2 self-start sm:self-auto">
+          <div className="flex items-center gap-2">
             <label
               htmlFor="category-sort-select"
-              className="text-xs sm:text-sm font-semibold text-slate-600 shrink-0"
+              className="text-xs text-slate-500 font-medium shrink-0"
             >
               সাজান:
             </label>
@@ -81,7 +92,7 @@ export default function CategoryProductList({
                 id="category-sort-select"
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value as SortOption)}
-                className="appearance-none bg-white border border-slate-200 text-slate-800 text-xs sm:text-sm font-medium rounded-lg pl-3 pr-8 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer shadow-xs"
+                className="appearance-none bg-white border border-slate-200/90 text-slate-800 text-xs font-semibold rounded-xl pl-3.5 pr-8 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer shadow-2xs"
                 aria-label="পণ্য সাজানোর অপশন"
               >
                 <option value="default">ডিফল্ট</option>
@@ -92,7 +103,7 @@ export default function CategoryProductList({
                 className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400 text-xs"
                 aria-hidden="true"
               >
-                ▼
+                ▾
               </span>
             </div>
           </div>
@@ -100,7 +111,7 @@ export default function CategoryProductList({
       </div>
 
       {/* ====================================================================
-          2. Product Grid or Empty State
+          3. Product Grid or Empty State
          ==================================================================== */}
       {sortedProducts.length === 0 ? (
         <EmptyState
@@ -111,7 +122,7 @@ export default function CategoryProductList({
           actionHref="/"
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {sortedProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
