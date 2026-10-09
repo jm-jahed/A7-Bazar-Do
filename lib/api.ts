@@ -131,3 +131,18 @@ export async function getProduct(id: number | string): Promise<Product | null> {
     return null;
   }
 }
+
+/**
+ * Fetches a single product by its string slug identifier (e.g., "sorno-machi-chal").
+ * Finds the matching item from the real product catalog.
+ */
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  try {
+    const allProducts = await getProducts();
+    const matched = allProducts.find((p) => p.slug === slug);
+    return matched || null;
+  } catch (error) {
+    console.error(`Failed to get product by slug "${slug}":`, error);
+    return null;
+  }
+}
