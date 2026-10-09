@@ -73,7 +73,17 @@ export async function getCategories(): Promise<Category[]> {
  */
 export async function getCategory(slug: string): Promise<Category | null> {
   try {
-    return await fetchFromApi<Category>(`/categories/${encodeURIComponent(slug)}`);
+    const category = await fetchFromApi<Category>(
+      `/categories/${encodeURIComponent(slug)}`
+    );
+    if (category && category.slug) return category;
+  } catch {
+    // If single category endpoint fails, fallback to searching all categories
+  }
+
+  try {
+    const all = await getCategories();
+    return all.find((c) => c.slug === slug) || null;
   } catch {
     return null;
   }
@@ -93,10 +103,21 @@ export async function getProducts(): Promise<Product[]> {
  * Endpoint: /products?category=[category]
  */
 export async function getProductsByCategory(category: string): Promise<Product[]> {
-  const data = await fetchFromApi<Product[]>(
-    `/products?category=${encodeURIComponent(category)}`
-  );
-  return Array.isArray(data) ? data : [];
+  try {
+    const data = await fetchFromApi<Product[]>(
+      `/products?category=${encodeURIComponent(category)}`
+    );
+    if (Array.isArray(data) && data.length > 0) return data;
+  } catch {
+    // If filter endpoint fails, fallback to filtering from all products
+  }
+
+  try {
+    const all = await getProducts();
+    return all.filter((p) => p.category === category);
+  } catch {
+    return [];
+  }
 }
 
 /**
