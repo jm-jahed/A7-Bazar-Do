@@ -71,18 +71,14 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-      enabled: Boolean(
-        process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
-      ),
+      clientId: process.env.GOOGLE_CLIENT_ID || "placeholder-google-client-id",
+      clientSecret:
+        process.env.GOOGLE_CLIENT_SECRET || "placeholder-google-client-secret",
     },
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID || "",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
-      enabled: Boolean(
-        process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
-      ),
+      clientId: process.env.GITHUB_CLIENT_ID || "placeholder-github-client-id",
+      clientSecret:
+        process.env.GITHUB_CLIENT_SECRET || "placeholder-github-client-secret",
     },
   },
 });

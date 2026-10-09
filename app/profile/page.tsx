@@ -54,7 +54,7 @@ export default async function ProfilePage() {
             আমার প্রোফাইল
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            আপনার অ্যাকাউন্টের বিবরণ ও ব্যক্তিগত তথ্য পরিচালনা করুন
+            আপনার অ্যাকাউন্টের তথ্য এখানে দেখুন।
           </p>
         </div>
 
