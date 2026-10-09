@@ -25,7 +25,7 @@ export default function ProductCard({
 
   return (
     <Link
-      href={`/product/${product.id}`}
+      href={`/product/${product.slug || product.id}`}
       className={`bazar-card p-4 sm:p-5 flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${className}`}
       aria-label={`${product.nameBn} - ${formatPrice(product.today)}`}
     >
