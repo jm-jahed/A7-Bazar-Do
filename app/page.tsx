@@ -50,102 +50,17 @@ function getTopFallers(products: Product[]): Product[] {
 // ============================================================================
 
 async function HomeProductSections() {
+  let products: Product[] | null = null;
+  let hasError = false;
+
   try {
-    const products = await getProducts();
-
-    if (!products || products.length === 0) {
-      return (
-        <div className="container-custom py-12">
-          <EmptyState
-            title="কোনো পণ্য পাওয়া যায়নি"
-            description="বর্তমানে বাজার দর সার্ভারে কোনো পণ্য তালিকাভুক্ত নেই।"
-          />
-        </div>
-      );
-    }
-
-    const topRisers = getTopRisers(products);
-    const topFallers = getTopFallers(products);
-
-    return (
-      <>
-        {/* ================================================================
-            Section A: Top Risers (আজ দাম বেড়েছে ▲)
-            Displays up to 6 rising products sorted by highest increase.
-           ================================================================ */}
-        {topRisers.length > 0 && (
-          <section className="py-8 sm:py-10 border-b border-slate-200/80 bg-white">
-            <div className="container-custom">
-              <div className="mb-6">
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
-                  <span>আজ দাম বেড়েছে</span>
-                  <span className="text-emerald-600 font-bold" aria-hidden="true">
-                    ▲
-                  </span>
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6">
-                {topRisers.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ================================================================
-            Section B: Top Fallers (আজ দাম কমেছে ▼)
-            Displays up to 6 falling products sorted by greatest drop.
-           ================================================================ */}
-        {topFallers.length > 0 && (
-          <section className="py-8 sm:py-10 border-b border-slate-200/80 bg-slate-50/50">
-            <div className="container-custom">
-              <div className="mb-6">
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
-                  <span>আজ দাম কমেছে</span>
-                  <span className="text-rose-600 font-bold" aria-hidden="true">
-                    ▼
-                  </span>
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6">
-                {topFallers.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ================================================================
-            Section C: All Products (সব পণ্য)
-            Displays all commodities returned by the API in a responsive grid.
-            Anchor id="সব-পণ্য" enables smooth navigation from the Hero CTA.
-           ================================================================ */}
-        <section id="সব-পণ্য" className="py-8 sm:py-12 bg-white">
-          <div className="container-custom">
-            <div className="mb-6 sm:mb-8">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-1">
-                সব পণ্য
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-500">
-                নিত্যপ্রয়োজনীয় পণ্যের আজকের সর্বশেষ বাজার দর ও মূল্যের তালিকা।
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-              {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          </div>
-        </section>
-      </>
-    );
+    products = await getProducts();
   } catch (error) {
     console.error("Failed to load products on Home page:", error);
+    hasError = true;
+  }
+
+  if (hasError || !products) {
     return (
       <div className="container-custom py-12">
         <ErrorState
@@ -155,6 +70,98 @@ async function HomeProductSections() {
       </div>
     );
   }
+
+  if (products.length === 0) {
+    return (
+      <div className="container-custom py-12">
+        <EmptyState
+          title="কোনো পণ্য পাওয়া যায়নি"
+          description="বর্তমানে বাজার দর সার্ভারে কোনো পণ্য তালিকাভুক্ত নেই।"
+        />
+      </div>
+    );
+  }
+
+  const topRisers = getTopRisers(products);
+  const topFallers = getTopFallers(products);
+
+  return (
+    <>
+      {/* ================================================================
+          Section A: Top Risers (আজ দাম বেড়েছে ▲)
+          Displays up to 6 rising products sorted by highest increase.
+         ================================================================ */}
+      {topRisers.length > 0 && (
+        <section className="py-8 sm:py-10 border-b border-slate-200/80 bg-white">
+          <div className="container-custom">
+            <div className="mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+                <span>আজ দাম বেড়েছে</span>
+                <span className="text-emerald-600 font-bold" aria-hidden="true">
+                  ▲
+                </span>
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6">
+              {topRisers.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ================================================================
+          Section B: Top Fallers (আজ দাম কমেছে ▼)
+          Displays up to 6 falling products sorted by greatest drop.
+         ================================================================ */}
+      {topFallers.length > 0 && (
+        <section className="py-8 sm:py-10 border-b border-slate-200/80 bg-slate-50/50">
+          <div className="container-custom">
+            <div className="mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+                <span>আজ দাম কমেছে</span>
+                <span className="text-rose-600 font-bold" aria-hidden="true">
+                  ▼
+                </span>
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6">
+              {topFallers.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ================================================================
+          Section C: All Products (সব পণ্য)
+          Displays all commodities returned by the API in a responsive grid.
+          Anchor id="সব-পণ্য" enables smooth navigation from the Hero CTA.
+         ================================================================ */}
+      <section id="সব-পণ্য" className="py-8 sm:py-12 bg-white">
+        <div className="container-custom">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-1">
+              সব পণ্য
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              নিত্যপ্রয়োজনীয় পণ্যের আজকের সর্বশেষ বাজার দর ও মূল্যের তালিকা।
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }
 
 // ============================================================================

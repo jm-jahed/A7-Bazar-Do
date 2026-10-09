@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-// @ts-ignore - node:sqlite is built-in in Node 22+
+// @ts-expect-error - node:sqlite is built-in in Node 22+
 import { DatabaseSync } from "node:sqlite";
 
 // ============================================================================
