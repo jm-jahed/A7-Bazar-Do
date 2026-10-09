@@ -1,25 +1,52 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { useSession, authClient } from "@/lib/auth-client";
 import { getBanglaDate } from "@/lib/utils";
 
 // ============================================================================
 // Navbar Component
 // Global website navigation bar containing the Bazar Dor logo, dynamic
-// Bengali date, and authentication navigation links (Sign In / Sign Up).
+// Bengali date, and responsive authentication state (Guest vs Authenticated).
 // ============================================================================
 
 export default function Navbar() {
-  // Dynamic Bengali date state. We initialize with an empty string or standard
-  // format and set it after hydration to avoid SSR/client timestamp mismatch.
-  const [banglaDate, setBanglaDate] = useState<string>("");
+  const router = useRouter();
+  const { data: session } = useSession();
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
-  useEffect(() => {
-    // Generate the current browser date in Bengali (e.g., ৯ অক্টোবর ২০২৬)
-    setBanglaDate(getBanglaDate(new Date(), true));
-  }, []);
+  // Generate current date in Bengali (e.g., ৯ অক্টোবর ২০২৬)
+  const banglaDate = getBanglaDate(new Date(), true);
+
+  // Handle user sign-out action
+  const handleSignOut = async () => {
+    if (isSigningOut) return;
+
+    try {
+      setIsSigningOut(true);
+      const res = await authClient.signOut();
+
+      if (res?.error) {
+        toast.error(
+          res.error.message || "সাইন আউট ব্যর্থ হয়েছে। আবার চেষ্টা করুন।"
+        );
+        return;
+      }
+
+      toast.success("সফলভাবে সাইন আউট করা হয়েছে।");
+      router.refresh();
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error ? err.message : "সাইন আউটে সমস্যা হয়েছে।";
+      toast.error(msg);
+    } finally {
+      setIsSigningOut(false);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-[0_1px_3px_0_rgba(0,0,0,0.03)]">
@@ -60,24 +87,54 @@ export default function Navbar() {
           </Link>
 
           {/* ================================================================
-              RIGHT: Authentication Links (Sign In & Sign Up)
+              RIGHT: Authentication Controls (Guest vs Logged In)
              ================================================================ */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Sign In Link */}
-            <Link
-              href="/signin"
-              className="inline-flex items-center justify-center px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:text-emerald-700 bg-slate-50 hover:bg-emerald-50/50 border border-slate-200 hover:border-emerald-200 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
-            >
-              সাইন ইন
-            </Link>
+            {session?.user ? (
+              // Authenticated User Controls
+              <div className="flex items-center gap-2 sm:gap-3">
+                {/* Profile Link */}
+                <Link
+                  href="/profile"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                  title="প্রোফাইল দেখুন"
+                >
+                  <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] sm:text-xs font-bold shrink-0">
+                    {session.user.name?.trim()?.charAt(0).toUpperCase() || "👤"}
+                  </span>
+                  <span className="max-w-[80px] sm:max-w-[120px] truncate">
+                    {session.user.name || "প্রোফাইল"}
+                  </span>
+                </Link>
 
-            {/* Sign Up Link */}
-            <Link
-              href="/signup"
-              className="btn-primary px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg shadow-sm"
-            >
-              সাইন আপ
-            </Link>
+                {/* Sign Out Button */}
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  disabled={isSigningOut}
+                  className="inline-flex items-center justify-center px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-rose-700 hover:text-rose-800 bg-rose-50 hover:bg-rose-100/70 border border-rose-200 rounded-lg transition-colors disabled:opacity-60 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
+                >
+                  {isSigningOut ? "অপেক্ষা..." : "সাইন আউট"}
+                </button>
+              </div>
+            ) : (
+              // Guest Controls (Sign In & Sign Up)
+              <>
+                <Link
+                  href="/signin"
+                  className="inline-flex items-center justify-center px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:text-emerald-700 bg-slate-50 hover:bg-emerald-50/50 border border-slate-200 hover:border-emerald-200 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                >
+                  সাইন ইন
+                </Link>
+
+                <Link
+                  href="/signup"
+                  className="btn-primary px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg shadow-2xs"
+                >
+                  সাইন আপ
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
