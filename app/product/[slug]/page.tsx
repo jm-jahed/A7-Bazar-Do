@@ -1,8 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { Metadata } from "next";
-import { getProductBySlug, getProducts } from "@/lib/api";
+import { getProductBySlug } from "@/lib/api";
+import { auth } from "@/lib/auth";
 import {
   formatPrice,
   formatUnitBn,
@@ -12,6 +14,7 @@ import {
 
 // ============================================================================
 // Product Details Page: /product/[slug]
+// Protected route — requires active login session via Better Auth.
 // Server Component displaying complete commodity data, price statistics,
 // historical comparisons, and market-wise price breakdown from the real API.
 // ============================================================================
@@ -20,22 +23,8 @@ interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
-/**
- * Pre-renders known product routes at build time.
- */
-export async function generateStaticParams() {
-  try {
-    const products = await getProducts();
-    return products
-      .filter((product) => Boolean(product.slug))
-      .map((product) => ({
-        slug: product.slug,
-      }));
-  } catch (error) {
-    console.error("Failed to generate static params for products:", error);
-    return [];
-  }
-}
+// Protected dynamic route — evaluated per request to verify active session
+export const dynamic = "force-dynamic";
 
 /**
  * Generates dynamic SEO metadata for the product detail page.
@@ -63,7 +52,19 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
 
-  // Fetch product by slug from real API
+  // 1. Server-side session verification via Better Auth
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  // 2. Redirect unauthenticated users to /signin with target callback URL
+  if (!session) {
+    redirect(
+      `/signin?callbackURL=${encodeURIComponent(`/product/${decodedSlug}`)}`
+    );
+  }
+
+  // 3. Fetch product by slug from real API
   const product = await getProductBySlug(decodedSlug);
 
   // If product does not exist, trigger Next.js notFound()
