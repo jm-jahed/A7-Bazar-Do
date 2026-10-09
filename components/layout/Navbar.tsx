@@ -18,6 +18,7 @@ export default function Navbar() {
   const router = useRouter();
   const { data: session } = useSession();
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Generate current date in Bengali (e.g., ৯ অক্টোবর ২০২৬)
   const banglaDate = getBanglaDate(new Date(), true);
@@ -38,6 +39,7 @@ export default function Navbar() {
       }
 
       toast.success("সফলভাবে সাইন আউট করা হয়েছে।");
+      setIsDropdownOpen(false);
       router.refresh();
     } catch (err: unknown) {
       const msg =
@@ -47,6 +49,9 @@ export default function Navbar() {
       setIsSigningOut(false);
     }
   };
+
+  const userInitial = session?.user?.name?.trim()?.charAt(0).toUpperCase() || "👤";
+  const firstName = session?.user?.name?.trim()?.split(" ")[0] || "ব্যবহারকারী";
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-[0_1px_3px_0_rgba(0,0,0,0.03)]">
@@ -91,31 +96,79 @@ export default function Navbar() {
              ================================================================ */}
           <div className="flex items-center gap-2 sm:gap-3">
             {session?.user ? (
-              // Authenticated User Controls
-              <div className="flex items-center gap-2 sm:gap-3">
-                {/* Profile Link */}
-                <Link
-                  href="/profile"
-                  className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
-                  title="প্রোফাইল দেখুন"
-                >
-                  <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] sm:text-xs font-bold shrink-0">
-                    {session.user.name?.trim()?.charAt(0).toUpperCase() || "👤"}
-                  </span>
-                  <span className="max-w-[80px] sm:max-w-[120px] truncate">
-                    {session.user.name || "প্রোফাইল"}
-                  </span>
-                </Link>
-
-                {/* Sign Out Button */}
+              // Authenticated User Avatar & Dropdown Menu
+              <div className="relative">
                 <button
                   type="button"
-                  onClick={handleSignOut}
-                  disabled={isSigningOut}
-                  className="inline-flex items-center justify-center px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-rose-700 hover:text-rose-800 bg-rose-50 hover:bg-rose-100/70 border border-rose-200 rounded-lg transition-colors disabled:opacity-60 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
+                  onClick={() => setIsDropdownOpen((prev) => !prev)}
+                  className="flex items-center gap-2 py-1.5 px-2 rounded-xl hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 cursor-pointer"
+                  aria-expanded={isDropdownOpen}
+                  aria-haspopup="true"
                 >
-                  {isSigningOut ? "অপেক্ষা..." : "সাইন আউট"}
+                  {session.user.image ? (
+                    <Image
+                      src={session.user.image}
+                      alt={session.user.name || "ইউজার"}
+                      width={32}
+                      height={32}
+                      className="w-8 h-8 rounded-full object-cover border border-slate-200"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-semibold shrink-0">
+                      {userInitial}
+                    </div>
+                  )}
+                  <span className="text-sm font-medium text-slate-800 hidden sm:inline-block max-w-[100px] truncate">
+                    {firstName}
+                  </span>
+                  <span className="text-xs text-slate-500">▾</span>
                 </button>
+
+                {/* Dropdown Menu */}
+                {isDropdownOpen && (
+                  <>
+                    {/* Backdrop */}
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setIsDropdownOpen(false)}
+                    />
+
+                    {/* Popover Card */}
+                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl border border-slate-200 shadow-xl z-50 p-4 space-y-3 animate-in fade-in duration-150">
+                      {/* User Info Header */}
+                      <div className="border-b border-slate-100 pb-3">
+                        <p className="text-sm font-bold text-slate-900 truncate">
+                          {session.user.name || "ব্যবহারকারী"}
+                        </p>
+                        <p className="text-xs text-slate-500 truncate mt-0.5">
+                          {session.user.email}
+                        </p>
+                      </div>
+
+                      {/* Menu Links */}
+                      <div className="space-y-1">
+                        <Link
+                          href="/profile"
+                          onClick={() => setIsDropdownOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-emerald-700 transition-colors"
+                        >
+                          <span>👤</span>
+                          <span>আমার প্রোফাইল</span>
+                        </Link>
+
+                        <button
+                          type="button"
+                          onClick={handleSignOut}
+                          disabled={isSigningOut}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer disabled:opacity-60 text-left"
+                        >
+                          <span>←</span>
+                          <span>{isSigningOut ? "সাইন আউট হচ্ছে..." : "সাইন আউট"}</span>
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             ) : (
               // Guest Controls (Sign In & Sign Up)

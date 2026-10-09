@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/layout/Navbar";
 import CategoryNav from "@/components/layout/CategoryNav";
 import PriceTicker from "@/components/layout/PriceTicker";
+import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
 // Load Google Noto Sans Bengali font for clean, readable Bengali and English typography
@@ -41,6 +42,9 @@ export default function RootLayout({
 
         {/* Page Content */}
         <div className="flex-1 flex flex-col">{children}</div>
+
+        {/* Global Footer (Requirement 7) */}
+        <Footer />
       </body>
     </html>
   );
