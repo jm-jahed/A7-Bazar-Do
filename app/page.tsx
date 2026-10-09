@@ -88,22 +88,22 @@ async function HomeProductSections() {
   return (
     <>
       {/* ================================================================
-          Section A: Top Risers (আজ দাম বেড়েছে ▲)
+          Section A: Top Risers (▲ আজ দাম বেড়েছে)
           Displays up to 6 rising products sorted by highest increase.
          ================================================================ */}
       {topRisers.length > 0 && (
-        <section className="py-8 sm:py-10 border-b border-slate-200/80 bg-white">
+        <section className="py-6 sm:py-8">
           <div className="container-custom">
-            <div className="mb-6">
+            <div className="mb-5">
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
-                <span>আজ দাম বেড়েছে</span>
-                <span className="text-emerald-600 font-bold" aria-hidden="true">
+                <span className="text-rose-600 text-sm sm:text-base leading-none" aria-hidden="true">
                   ▲
                 </span>
+                <span>আজ দাম বেড়েছে</span>
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {topRisers.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -113,22 +113,22 @@ async function HomeProductSections() {
       )}
 
       {/* ================================================================
-          Section B: Top Fallers (আজ দাম কমেছে ▼)
+          Section B: Top Fallers (▼ আজ দাম কমেছে)
           Displays up to 6 falling products sorted by greatest drop.
          ================================================================ */}
       {topFallers.length > 0 && (
-        <section className="py-8 sm:py-10 border-b border-slate-200/80 bg-slate-50/50">
+        <section className="py-6 sm:py-8">
           <div className="container-custom">
-            <div className="mb-6">
+            <div className="mb-5">
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
-                <span>আজ দাম কমেছে</span>
-                <span className="text-rose-600 font-bold" aria-hidden="true">
+                <span className="text-emerald-600 text-sm sm:text-base leading-none" aria-hidden="true">
                   ▼
                 </span>
+                <span>আজ দাম কমেছে</span>
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {topFallers.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -142,18 +142,18 @@ async function HomeProductSections() {
           Displays all commodities returned by the API in a responsive grid.
           Anchor id="সব-পণ্য" enables smooth navigation from the Hero CTA.
          ================================================================ */}
-      <section id="সব-পণ্য" className="py-8 sm:py-12 bg-white">
+      <section id="সব-পণ্য" className="py-6 sm:py-8 scroll-mt-24">
         <div className="container-custom">
-          <div className="mb-6 sm:mb-8">
+          <div className="mb-5">
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-1">
               সব পণ্য
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              নিত্যপ্রয়োজনীয় পণ্যের আজকের সর্বশেষ বাজার দর ও মূল্যের তালিকা।
+              বাজারের সব নিত্যপ্রয়োজনীয় পণ্যের তালিকা ও বিস্তারিত তথ্য।
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
