@@ -35,6 +35,15 @@ function SignUpForm() {
     searchParams.get("callbackURL") || searchParams.get("redirect");
   const callbackURL = getSafeCallbackUrl(rawCallback);
 
+  const { data: sessionData, isPending: sessionLoading } = authClient.useSession();
+
+  // If already logged in, automatically redirect to callbackURL or home
+  React.useEffect(() => {
+    if (!sessionLoading && sessionData?.user) {
+      router.replace(callbackURL);
+    }
+  }, [sessionData, sessionLoading, callbackURL, router]);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
