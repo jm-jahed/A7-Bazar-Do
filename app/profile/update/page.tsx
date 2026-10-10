@@ -21,9 +21,15 @@ export const metadata: Metadata = {
 
 export default async function UpdateProfilePage() {
   // 1. Server-side session verification via Better Auth
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  let session = null;
+  try {
+    session = await auth.api.getSession({
+      headers: await headers(),
+    });
+  } catch (err) {
+    console.error("Error checking session on profile update page:", err);
+    session = null;
+  }
 
   // 2. Redirect unauthenticated visitors to sign in with safe callback URL
   if (!session || !session.user) {

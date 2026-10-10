@@ -121,16 +121,16 @@ function SignUpForm() {
         const providerName = provider === "google" ? "Google" : "GitHub";
         const errMsg =
           res.error.message ||
-          `${providerName} সাইন আপ সম্পন্ন করা যায়নি। অনুগ্রহ করে .env.local ফাইলে OAuth ক্রেডেনশিয়াল যোগ করুন।`;
+          `${providerName} সাইন আপ সম্পন্ন করা যায়নি। অনুগ্রহ করে ইমেইল ও পাসওয়ার্ড দিয়ে সাইন আপ করুন।`;
         setErrorMessage(errMsg);
         toast.error(errMsg);
       }
     } catch (err: unknown) {
       const providerName = provider === "google" ? "Google" : "GitHub";
       const errMsg =
-        err instanceof Error
+        err instanceof Error && !err.message.includes("Failed to fetch")
           ? err.message
-          : `${providerName} সাইন আপ সম্পন্ন করা যায়নি।`;
+          : `${providerName} সাইন আপের জন্য OAuth পরিবেশ ভেরিয়েবল প্রয়োজন। অনুগ্রহ করে সরাসরি ইমেইল ও পাসওয়ার্ড দিয়ে অ্যাকাউন্ট তৈরি করুন।`;
       setErrorMessage(errMsg);
       toast.error(errMsg);
     } finally {

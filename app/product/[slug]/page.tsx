@@ -32,20 +32,26 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const decodedSlug = decodeURIComponent(slug);
-  const product = await getProductBySlug(decodedSlug);
+  try {
+    const { slug } = await params;
+    const decodedSlug = decodeURIComponent(slug);
+    const product = await getProductBySlug(decodedSlug);
 
-  if (!product) {
+    if (!product) {
+      return {
+        title: "পণ্য পাওয়া যায়নি — বাজার দর",
+      };
+    }
+
     return {
-      title: "পণ্য পাওয়া যায়নি — বাজার দর",
+      title: `${product.nameBn} আজকের বাজার দর — বাজার দর`,
+      description: `${product.nameBn}-এর আজকের খুচরা ও পাইকারি বাজার দর, সর্বনিম্ন, সর্বোচ্চ ও গড় মূল্য তালিকা।`,
+    };
+  } catch {
+    return {
+      title: "বাজার দর — প্রয়োজনীয় পণ্যের দাম এক নজরে",
     };
   }
-
-  return {
-    title: `${product.nameBn} আজকের বাজার দর — বাজার দর`,
-    description: `${product.nameBn}-এর আজকের খুচরা ও পাইকারি বাজার দর, সর্বনিম্ন, সর্বোচ্চ ও গড় মূল্য তালিকা।`,
-  };
 }
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
@@ -53,9 +59,15 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const decodedSlug = decodeURIComponent(slug);
 
   // 1. Server-side session verification via Better Auth
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  let session = null;
+  try {
+    session = await auth.api.getSession({
+      headers: await headers(),
+    });
+  } catch (err) {
+    console.error("Error checking session on product detail page:", err);
+    session = null;
+  }
 
   // 2. Redirect unauthenticated users to /signin with target callback URL
   if (!session) {
