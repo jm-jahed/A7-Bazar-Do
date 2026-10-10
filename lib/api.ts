@@ -8,10 +8,10 @@ import { Category, Product } from "./types";
 // Primary API provided by the assignment
 const PRIMARY_API_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://api.api-store.workers.dev/api/bazardor";
+  "https://openapi.programming-hero.com/api/bazardor";
 
-// Alternative fallback API provided by the assignment
-const FALLBACK_API_URL = "https://api.abcz.workers.dev/api/bazardor";
+// Alternative fallback API
+const FALLBACK_API_URL = "https://openapi.programming-hero.com/api/bazardor";
 
 /**
  * Generic fetcher that requests data from the primary API first.
@@ -139,7 +139,9 @@ export async function getProduct(id: number | string): Promise<Product | null> {
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   try {
     const allProducts = await getProducts();
-    const matched = allProducts.find((p) => p.slug === slug);
+    const matched = allProducts.find(
+      (p) => p.slug === slug || String(p.id) === slug
+    );
     return matched || null;
   } catch (error) {
     console.error(`Failed to get product by slug "${slug}":`, error);

@@ -22,8 +22,8 @@ Bazar Dor is a web application for tracking daily commodity market prices, daily
 
 ## Data Source
 
-- **Primary API**: `https://api.api-store.workers.dev/api/bazardor`
-- **Fallback API**: `https://api.abcz.workers.dev/api/bazardor`
+- **Primary API**: `https://openapi.programming-hero.com/api/bazardor`
+- **Fallback API**: `https://openapi.programming-hero.com/api/bazardor`
 - **Raw JSON Data**: `https://raw.githubusercontent.com/programming-hero-web-course-4/b11-a7-bazar-dor-data/refs/heads/main/data.json`
 
 ## Installation & Local Setup

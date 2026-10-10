@@ -86,7 +86,7 @@ export default function PriceTicker() {
               return (
                 <Link
                   key={`${product.id}-${idx}`}
-                  href={`/product/${product.id}`}
+                  href={`/product/${product.slug}`}
                   className="flex items-center gap-1.5 sm:gap-2 shrink-0 hover:text-emerald-700 transition-colors focus:outline-none focus-visible:underline"
                   tabIndex={0}
                 >
