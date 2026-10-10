@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap");
 
 /* ==========================================================================
    Bazar Dor (বাজার দর) - Global Design System & Color Tokens
@@ -30,7 +31,7 @@
   --neutral-bg: #f1f5f9;
 
   /* Font variable */
-  --font-sans: var(--font-bengali), system-ui, -apple-system, sans-serif;
+  --font-sans: "Noto Sans Bengali", system-ui, -apple-system, sans-serif;
 }
 
 
