@@ -77,7 +77,14 @@ function initializeDatabase() {
     return sqliteDb;
   } catch {
     // Fallback to memory adapter when node:sqlite is unavailable in serverless environments
-    const inMemoryStore: Record<string, unknown[]> = {};
+    const inMemoryStore: Record<string, unknown[]> = {
+      user: [],
+      session: [],
+      account: [],
+      verification: [],
+      rateLimit: [],
+      jwks: [],
+    };
     return memoryAdapter(inMemoryStore);
   }
 }
