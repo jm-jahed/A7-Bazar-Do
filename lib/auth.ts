@@ -116,6 +116,12 @@ export const auth = betterAuth({
       ? [`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`]
       : []),
   ],
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 7 * 24 * 60 * 60, // 7 days signed cookie cache
+    },
+  },
   emailAndPassword: {
     enabled: true,
   },

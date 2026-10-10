@@ -70,7 +70,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   }
 
   // 2. Redirect unauthenticated users to /signin with target callback URL
-  if (!session) {
+  if (!session?.user) {
     redirect(
       `/signin?callbackURL=${encodeURIComponent(`/product/${decodedSlug}`)}`
     );

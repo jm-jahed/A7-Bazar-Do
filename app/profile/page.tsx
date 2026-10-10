@@ -32,7 +32,7 @@ export default async function ProfilePage() {
   }
 
   // 2. Redirect unauthenticated visitors to sign in with safe callback URL
-  if (!session || !session.user) {
+  if (!session?.user) {
     redirect(`/signin?callbackURL=${encodeURIComponent("/profile")}`);
   }
 
@@ -65,7 +65,15 @@ export default async function ProfilePage() {
         </div>
 
         {/* Profile Details & Challenge C3 Update Form */}
-        <ProfileForm user={session.user} />
+        <ProfileForm
+          user={
+            session?.user || {
+              id: "user",
+              name: "ব্যবহারকারী",
+              email: "user@example.com",
+            }
+          }
+        />
       </div>
     </main>
   );
