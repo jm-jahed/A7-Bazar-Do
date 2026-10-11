@@ -7,11 +7,7 @@ import { Category } from "@/lib/types";
 import { getCategories } from "@/lib/api";
 import CategorySkeleton from "@/components/ui/CategorySkeleton";
 
-// ============================================================================
-// CategoryNav Component
-// Displays the horizontal category navigation bar under the main Navbar.
-// Fetches real categories from the Bazar Dor API and highlights the active link.
-// ============================================================================
+// Category navigation bar
 
 export default function CategoryNav() {
   const pathname = usePathname();
@@ -19,7 +15,7 @@ export default function CategoryNav() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasError, setHasError] = useState<boolean>(false);
 
-  // Fetch categories from the real API on component mount
+  // Load categories from API
   useEffect(() => {
     async function loadCategories() {
       try {
@@ -45,23 +41,17 @@ export default function CategoryNav() {
     >
       <div className="container-custom">
         <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto py-2.5 sm:py-3 scrollbar-none no-scrollbar">
-          {/* ==============================================================
-              1. Loading State (Shows CategorySkeleton while fetching)
-             ============================================================== */}
+          {/* Loading state */}
           {isLoading && <CategorySkeleton count={8} />}
 
-          {/* ==============================================================
-              2. Error State (Fallback message if API fails)
-             ============================================================== */}
+          {/* Error message */}
           {!isLoading && hasError && (
             <div className="text-xs text-rose-500 py-1 font-medium">
               ক্যাটাগরি লোড করা যায়নি।
             </div>
           )}
 
-          {/* ==============================================================
-              3. Category Links (Real API Data)
-             ============================================================== */}
+          {/* Category buttons */}
           {!isLoading &&
             !hasError &&
             categories.map((category) => {
