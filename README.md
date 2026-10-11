@@ -1,5 +1,7 @@
 # Bazar Dor (বাজার দর)
 
+**Live Demo**: [https://a7-bazar-do.vercel.app](https://a7-bazar-do.vercel.app/)
+
 Bazar Dor is a web application for tracking daily commodity market prices, daily price fluctuations, and cross-market price comparisons across local markets in Bangladesh.
 
 ## Features
@@ -53,6 +55,7 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## GitHub Repository
+## Links
 
-- **Repository URL**: [https://github.com/jm-jahed/A7-Bazar-Do.git](https://github.com/jm-jahed/A7-Bazar-Do.git)
+- **Live URL**: [https://a7-bazar-do.vercel.app](https://a7-bazar-do.vercel.app/)
+- **GitHub Repository**: [https://github.com/jm-jahed/A7-Bazar-Do.git](https://github.com/jm-jahed/A7-Bazar-Do.git)
