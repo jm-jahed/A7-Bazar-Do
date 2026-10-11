@@ -1,11 +1,6 @@
 import { createAuthClient } from "better-auth/react";
 
-// ============================================================================
-// Better Auth React Client
-// Exports hooks and methods for client-side authentication:
-// signIn, signUp, useSession, signOut, updateUser.
-// Automatically resolves origin in browser to work seamlessly on local & Vercel.
-// ============================================================================
+// Auth client for login, register, and session handling in the browser
 
 export const authClient = createAuthClient({
   baseURL:

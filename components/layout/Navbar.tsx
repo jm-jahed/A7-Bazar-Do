@@ -8,11 +8,7 @@ import toast from "react-hot-toast";
 import { useSession, authClient } from "@/lib/auth-client";
 import { getBanglaDate } from "@/lib/utils";
 
-// ============================================================================
-// Navbar Component
-// Global website navigation bar containing the Bazar Dor logo, dynamic
-// Bengali date, and responsive authentication state (Guest vs Authenticated).
-// ============================================================================
+// Navbar with logo, date, and user account buttons
 
 export default function Navbar() {
   const router = useRouter();
@@ -20,10 +16,10 @@ export default function Navbar() {
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Generate current date in Bengali (e.g., ৯ অক্টোবর ২০২৬)
+  // Bengali date for today
   const banglaDate = getBanglaDate(new Date(), true);
 
-  // Handle user sign-out action
+  // Sign out handler
   const handleSignOut = async () => {
     if (isSigningOut) return;
 
@@ -57,9 +53,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-[0_1px_3px_0_rgba(0,0,0,0.03)]">
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
-          {/* ================================================================
-              LEFT: Logo & Bengali Date
-             ================================================================ */}
+          {/* Logo and Bengali date */}
           <Link
             href="/"
             className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg p-1"
@@ -91,12 +85,10 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* ================================================================
-              RIGHT: Authentication Controls (Guest vs Logged In)
-             ================================================================ */}
+          {/* User profile or login buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
             {session?.user ? (
-              // Authenticated User Avatar & Dropdown Menu
+              // Logged in user menu
               <div className="relative">
                 <button
                   type="button"
@@ -124,7 +116,7 @@ export default function Navbar() {
                   <span className="text-xs text-slate-500">▾</span>
                 </button>
 
-                {/* Dropdown Menu */}
+                {/* Dropdown menu */}
                 {isDropdownOpen && (
                   <>
                     {/* Backdrop */}
@@ -145,7 +137,7 @@ export default function Navbar() {
                         </p>
                       </div>
 
-                      {/* Menu Links */}
+                      {/* Menu links */}
                       <div className="space-y-1">
                         <Link
                           href="/profile"
@@ -171,7 +163,7 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              // Guest Controls (Sign In & Sign Up)
+              // Buttons for guests
               <>
                 <Link
                   href="/signin"

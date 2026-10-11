@@ -1,9 +1,6 @@
-// ============================================================================
-// Data Types for Bazar Dor (বাজার দর)
-// These interfaces represent the exact structure returned by the real API.
-// ============================================================================
+// Data types for products and categories from the API
 
-// Represents a product category (e.g., চাল, ডাল, সবজি)
+// Category type
 export interface Category {
   id: string;
   slug: string;
@@ -11,13 +8,13 @@ export interface Category {
   icon: string;
 }
 
-// Represents the daily price change direction and percentage
+// Price change info
 export interface PriceChange {
   dir: "up" | "down" | "flat";
   pct: number;
 }
 
-// Represents price information in a specific local bazaar/market
+// Market price info
 export interface MarketPrice {
   market: string;
   division: string;
@@ -25,7 +22,7 @@ export interface MarketPrice {
   max: number;
 }
 
-// Represents a complete product item with price statistics and market breakdown
+// Main product type
 export interface Product {
   id: number;
   slug: string;
@@ -33,8 +30,8 @@ export interface Product {
   category: string;
   categoryNameBn: string;
   categoryIcon: string;
-  unit: string; // "kg" | "litre" | "dozen" | "piece"
-  image: string; // Emoji character or illustration symbol
+  unit: string;
+  image: string;
   today: number;
   yesterday: number;
   lastWeek: number;
@@ -43,5 +40,5 @@ export interface Product {
   markets: MarketPrice[];
 }
 
-// Sort options for the category and product listings
+// Sort options for product listings
 export type SortOption = "default" | "price-low-to-high" | "price-high-to-low";

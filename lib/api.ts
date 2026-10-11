@@ -1,30 +1,21 @@
 import { Category, Product } from "./types";
 
-// ============================================================================
-// Bazar Dor API Service
-// Handles fetching data from the real API with automatic fallback support.
-// ============================================================================
+// Helper functions to fetch data from the API
 
-// Primary API provided by the assignment
+// Primary API URL
 const PRIMARY_API_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
   "https://openapi.programming-hero.com/api/bazardor";
 
-// Alternative fallback API
+// Fallback API URL
 const FALLBACK_API_URL = "https://openapi.programming-hero.com/api/bazardor";
 
-/**
- * Generic fetcher that requests data from the primary API first.
- * If the primary API fails (e.g. 500 error or invalid response),
- * it seamlessly tries the alternative backup API.
- */
+// Helper function to fetch data and retry with fallback if needed
 async function fetchFromApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  // Helper to fetch and parse JSON safely
   async function request(baseUrl: string): Promise<T> {
     const url = `${baseUrl}${endpoint}`;
     const response = await fetch(url, {
       ...options,
-      // Revalidate cache every 60 seconds in Next.js
       next: { revalidate: 60 },
     });
 
@@ -37,10 +28,10 @@ async function fetchFromApi<T>(endpoint: string, options?: RequestInit): Promise
   }
 
   try {
-    // 1. Try Primary API first
+    // Try primary API first
     return await request(PRIMARY_API_URL);
   } catch (primaryError) {
-    // 2. If Primary API fails, fallback to Alternative API
+    // If primary fails, try fallback API
     console.warn(
       `Primary API failed (${(primaryError as Error).message}), attempting alternative API...`
     );
@@ -58,19 +49,13 @@ async function fetchFromApi<T>(endpoint: string, options?: RequestInit): Promise
   }
 }
 
-/**
- * Fetches the list of all categories.
- * Endpoint: /categories
- */
+// Get all categories
 export async function getCategories(): Promise<Category[]> {
   const data = await fetchFromApi<Category[]>("/categories");
   return Array.isArray(data) ? data : [];
 }
 
-/**
- * Fetches a single category by its slug identifier (e.g., "chal", "sobji").
- * Endpoint: /categories/[slug]
- */
+// Get single category by slug
 export async function getCategory(slug: string): Promise<Category | null> {
   try {
     const category = await fetchFromApi<Category>(
@@ -78,7 +63,7 @@ export async function getCategory(slug: string): Promise<Category | null> {
     );
     if (category && category.slug) return category;
   } catch {
-    // If single category endpoint fails, fallback to searching all categories
+    // Fallback: search in all categories
   }
 
   try {
@@ -89,19 +74,13 @@ export async function getCategory(slug: string): Promise<Category | null> {
   }
 }
 
-/**
- * Fetches the list of all products.
- * Endpoint: /products
- */
+// Get all products
 export async function getProducts(): Promise<Product[]> {
   const data = await fetchFromApi<Product[]>("/products");
   return Array.isArray(data) ? data : [];
 }
 
-/**
- * Fetches products filtered by a category slug.
- * Endpoint: /products?category=[category]
- */
+// Get products filtered by category
 export async function getProductsByCategory(category: string): Promise<Product[]> {
   try {
     const data = await fetchFromApi<Product[]>(
@@ -109,7 +88,7 @@ export async function getProductsByCategory(category: string): Promise<Product[]
     );
     if (Array.isArray(data) && data.length > 0) return data;
   } catch {
-    // If filter endpoint fails, fallback to filtering from all products
+    // Fallback: filter from all products
   }
 
   try {
@@ -120,10 +99,7 @@ export async function getProductsByCategory(category: string): Promise<Product[]
   }
 }
 
-/**
- * Fetches a single product by its numeric ID.
- * Endpoint: /products/[id]
- */
+// Get single product by id
 export async function getProduct(id: number | string): Promise<Product | null> {
   try {
     return await fetchFromApi<Product>(`/products/${encodeURIComponent(id)}`);
@@ -132,10 +108,7 @@ export async function getProduct(id: number | string): Promise<Product | null> {
   }
 }
 
-/**
- * Fetches a single product by its string slug identifier (e.g., "sorno-machi-chal").
- * Finds the matching item from the real product catalog.
- */
+// Get single product by slug or id
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   try {
     const allProducts = await getProducts();

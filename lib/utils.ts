@@ -1,10 +1,6 @@
-// ============================================================================
-// Utility Functions for Bazar Dor (বাজার দর)
-// Contains helper functions for Bengali number conversion, price formatting,
-// unit localization, and dynamic Bengali date formatting.
-// ============================================================================
+// Helper utility functions for formatting numbers, prices, units, and dates
 
-// Mapping from English digits (0-9) to Bengali digits (০-৯)
+// Mapping from English digits to Bengali digits
 const BANGLA_DIGITS: Record<string, string> = {
   "0": "০",
   "1": "১",
@@ -18,7 +14,7 @@ const BANGLA_DIGITS: Record<string, string> = {
   "9": "৯",
 };
 
-// Bengali month names in order (0-indexed matching JavaScript Date.getMonth())
+// Bengali month names
 export const BANGLA_MONTHS: string[] = [
   "জানুয়ারি",
   "ফেব্রুয়ারি",
@@ -34,7 +30,7 @@ export const BANGLA_MONTHS: string[] = [
   "ডিসেম্বর",
 ];
 
-// Bengali weekday names
+// Bengali day names
 export const BANGLA_DAYS: string[] = [
   "রবিবার",
   "সোমবার",
@@ -45,13 +41,7 @@ export const BANGLA_DAYS: string[] = [
   "শনিবার",
 ];
 
-/**
- * Converts English numbers/digits to Bengali numbers.
- * Example: 148 -> "১৪৮", 1850 -> "১,৮৫০"
- *
- * NOTE: Internal application calculations and sorting must always use numeric
- * values. We only call toBanglaNumber() when displaying text in the UI.
- */
+// Converts English numbers to Bengali digits
 export function toBanglaNumber(value: number | string | null | undefined): string {
   if (value === null || value === undefined) return "";
   
@@ -59,24 +49,14 @@ export function toBanglaNumber(value: number | string | null | undefined): strin
   return str.replace(/[0-9]/g, (digit) => BANGLA_DIGITS[digit] || digit);
 }
 
-/**
- * Formats a numeric price into a user-friendly Bengali price string with "টাকা".
- * Example: 148 -> "১৪৮ টাকা"
- */
+// Formats number into price string with Taka (e.g. "১৪৮ টাকা")
 export function formatPrice(price: number | string | null | undefined): string {
   if (price === null || price === undefined) return "০ টাকা";
   const numStr = toBanglaNumber(price);
   return `${numStr} টাকা`;
 }
 
-/**
- * Converts English unit keys into Bengali unit phrases.
- * Example:
- * "kg" -> "প্রতি কেজি"
- * "litre" -> "প্রতি লিটার"
- * "dozen" -> "প্রতি ডজন"
- * "piece" -> "প্রতি পিস"
- */
+// Converts English unit into Bengali (e.g. "kg" -> "প্রতি কেজি")
 export function formatUnitBn(unit: string | null | undefined): string {
   if (!unit) return "";
   const normalized = unit.toLowerCase().trim();
@@ -97,13 +77,7 @@ export function formatUnitBn(unit: string | null | undefined): string {
   }
 }
 
-/**
- * Formats a percentage change with appropriate direction arrow and Bengali digits.
- * Example:
- * (2.1, "up") -> "▲ ২.১%"
- * (1.5, "down") -> "▼ ১.৫%"
- * (0.0, "flat") -> "— ০.০%"
- */
+// Formats percentage change with arrow
 export function formatPriceChange(pct: number, dir: "up" | "down" | "flat" = "flat"): string {
   const absPct = Math.abs(pct);
   const banglaPct = toBanglaNumber(absPct.toFixed(1));
@@ -117,10 +91,7 @@ export function formatPriceChange(pct: number, dir: "up" | "down" | "flat" = "fl
   return `— ${banglaPct}%`;
 }
 
-/**
- * Generates the formatted Bengali date for the given Date object (or current time).
- * Example: Date(2026-10-09) -> "৯ অক্টোবর ২০২৬" or "শুক্রবার, ৯ অক্টোবর ২০২৬"
- */
+// Formats a date into Bengali text
 export function getBanglaDate(dateInput?: Date, includeDayName = false): string {
   const date = dateInput || new Date();
   const day = toBanglaNumber(date.getDate());

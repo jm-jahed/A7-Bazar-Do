@@ -1,15 +1,11 @@
 import { betterAuth } from "better-auth";
 import { memoryAdapter } from "@better-auth/memory-adapter";
 
-// ============================================================================
-// Better Auth Server Configuration
-// Supports persistent SQLite storage when node:sqlite is available (Node 22+),
-// and automatically falls back to in-memory adapter on Vercel/serverless environments.
-// ============================================================================
+// Auth server configuration
 
 function initializeDatabase() {
   try {
-    // Dynamically attempt to load node:sqlite to avoid build/runtime crashes on Node 20 / serverless
+    // Try using sqlite if available
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { DatabaseSync } = require("node:sqlite");
     const dbPath =
@@ -25,7 +21,7 @@ function initializeDatabase() {
       sqliteDb = new DatabaseSync(":memory:");
     }
 
-    // Ensure required Better Auth database schema exists
+    // Create auth tables if they don't exist yet
     sqliteDb.exec(`
       CREATE TABLE IF NOT EXISTS user (
         id TEXT PRIMARY KEY,
@@ -76,7 +72,7 @@ function initializeDatabase() {
 
     return sqliteDb;
   } catch {
-    // Fallback to memory adapter when node:sqlite is unavailable in serverless environments
+    // Fallback to in-memory storage if sqlite is not available
     const inMemoryStore: Record<string, unknown[]> = {
       user: [],
       session: [],
