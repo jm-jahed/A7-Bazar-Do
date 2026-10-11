@@ -6,12 +6,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 
-// ============================================================================
-// Sign In Form Component
-// Handles email/password and social login with callbackURL preservation.
-// ============================================================================
+// Sign in form
 
-// Safe callback URL validator to prevent open redirects and loops
+// Clean callback URL
 function getSafeCallbackUrl(raw: string | null): string {
   if (!raw) return "/";
   const trimmed = raw.trim();
@@ -37,7 +34,7 @@ function SignInForm() {
 
   const { data: sessionData, isPending: sessionLoading } = authClient.useSession();
 
-  // If already logged in, automatically redirect to callbackURL or home
+  // Redirect if already logged in
   React.useEffect(() => {
     if (!sessionLoading && sessionData?.user) {
       router.replace(callbackURL);
@@ -50,7 +47,7 @@ function SignInForm() {
   const [socialLoading, setSocialLoading] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Email & Password submission handler
+  // Handle email and password submit
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -100,7 +97,7 @@ function SignInForm() {
     }
   };
 
-  // Social sign-in handler (Google / GitHub)
+  // Handle Google and GitHub sign in
   const handleSocialSignIn = async (provider: "google" | "github") => {
     setErrorMessage(null);
     setSocialLoading(provider);
@@ -134,9 +131,7 @@ function SignInForm() {
 
   return (
     <div className="w-full max-w-[420px] mx-auto">
-      {/* ====================================================================
-          1. Header Outside the Card (Figma Matched)
-         ==================================================================== */}
+      {/* Page title */}
       <div className="text-center mb-5">
         <h1 className="text-2xl sm:text-[26px] font-bold text-slate-900 leading-tight">
           সাইন ইন
@@ -146,11 +141,9 @@ function SignInForm() {
         </p>
       </div>
 
-      {/* ====================================================================
-          2. Main White Form Card
-         ==================================================================== */}
+      {/* Login card */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] p-6 sm:p-7 space-y-4">
-        {/* In-form error message banner */}
+        {/* Error message */}
         {errorMessage && (
           <div
             className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium"
@@ -160,7 +153,7 @@ function SignInForm() {
           </div>
         )}
 
-        {/* Email / Password Form */}
+        {/* Email and password form */}
         <form onSubmit={handleSubmit} className="space-y-3.5">
           <div>
             <label
@@ -215,7 +208,7 @@ function SignInForm() {
           </span>
         </div>
 
-        {/* Social Sign In Buttons (Side by Side Grid) */}
+        {/* Social login buttons */}
         <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
@@ -269,7 +262,7 @@ function SignInForm() {
           </button>
         </div>
 
-        {/* Footer Link to Register */}
+        {/* Link to sign up */}
         <div className="pt-2 text-center text-xs text-slate-600">
           <span>অ্যাকাউন্ট নেই? </span>
           <Link
@@ -285,9 +278,7 @@ function SignInForm() {
         </div>
       </div>
 
-      {/* ====================================================================
-          3. Back to Home Link Below Card
-         ==================================================================== */}
+      {/* Back to home link */}
       <div className="mt-5 text-center">
         <Link
           href="/"

@@ -12,23 +12,15 @@ import {
   toBanglaNumber,
 } from "@/lib/utils";
 
-// ============================================================================
-// Product Details Page: /product/[slug]
-// Protected route — requires active login session via Better Auth.
-// Server Component displaying complete commodity data, price statistics,
-// historical comparisons, and market-wise price breakdown from the real API.
-// ============================================================================
+// Product details page (requires login)
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Protected dynamic route — evaluated per request to verify active session
 export const dynamic = "force-dynamic";
 
-/**
- * Generates dynamic SEO metadata for the product detail page.
- */
+// Dynamic page metadata
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
@@ -58,7 +50,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
 
-  // 1. Server-side session verification via Better Auth
+  // Check if user is logged in
   let session = null;
   try {
     session = await auth.api.getSession({
@@ -69,25 +61,22 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     session = null;
   }
 
-  // 2. Redirect unauthenticated users to /signin with target callback URL
+  // Redirect to sign in if not logged in
   if (!session?.user) {
     redirect(
       `/signin?callbackURL=${encodeURIComponent(`/product/${decodedSlug}`)}`
     );
   }
 
-  // 3. Fetch product by slug from real API
+  // Fetch product data
   const product = await getProductBySlug(decodedSlug);
 
-  // If product does not exist, trigger Next.js notFound()
+  // Return 404 if not found
   if (!product) {
     notFound();
   }
 
-  // ==========================================================================
-  // Price Summary Calculations (Min, Max, Average)
-  // Derived strictly from real numeric market values.
-  // ==========================================================================
+  // Calculate min, max, and average prices
   const markets = Array.isArray(product.markets) ? product.markets : [];
   const hasMarkets = markets.length > 0;
 
@@ -114,9 +103,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   return (
     <main className="flex-1 py-6 sm:py-8">
       <div className="container-custom max-w-5xl">
-        {/* ================================================================
-            1. Breadcrumb Navigation (Figma Matched)
-           ================================================================ */}
+        {/* Breadcrumb links */}
         <nav
           className="mb-4 flex items-center gap-1.5 text-xs text-slate-500 font-medium"
           aria-label="ব্রেডক্রাম্ব"
@@ -144,16 +131,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           </span>
         </nav>
 
-        {/* ================================================================
-            2. Top Summary Card: Product Header (Figma Matched)
-           ================================================================ */}
+        {/* Product header card */}
         <section
           className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] p-6 sm:p-7 mb-6"
           aria-labelledby="product-title"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div className="flex items-start sm:items-center gap-4 sm:gap-5">
-              {/* Product Emoji / Image Box */}
               <div className="w-16 h-16 rounded-2xl bg-[#f4f7f5] border border-slate-100 flex items-center justify-center text-3xl sm:text-4xl shrink-0">
                 <span role="img" aria-label={product.nameBn}>
                   {product.image}
@@ -161,7 +145,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               </div>
 
               <div>
-                {/* Main Product Title */}
                 <h1
                   id="product-title"
                   className="text-xl sm:text-2xl font-bold text-slate-900 leading-tight"
@@ -169,12 +152,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   {product.nameBn}
                 </h1>
 
-                {/* Unit & Category */}
                 <p className="text-xs text-slate-500 mt-1 leading-normal">
                   {formatUnitBn(product.unit)} {product.categoryNameBn ? `· ${product.categoryNameBn}` : ""}
                 </p>
 
-                {/* Yesterday Comparison Note */}
                 <p className="text-xs text-slate-500 mt-1 leading-normal">
                   {yesterdayDiff > 0
                     ? `গতকালের তুলনায় আজ দাম বেড়েছে - ${toBanglaNumber(yesterdayDiff)} টাকা`
@@ -185,7 +166,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               </div>
             </div>
 
-            {/* Today's Price Box */}
+            {/* Today's price */}
             <div className="bg-[#f8faf9] border border-slate-200/80 rounded-2xl px-6 py-4 text-center min-w-[140px] self-start sm:self-auto">
               <span className="text-xs text-slate-500 font-medium block leading-none mb-1.5">
                 আজকের দাম
@@ -217,11 +198,9 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           </div>
         </section>
 
-        {/* ================================================================
-            3. Unified Lower Card: Price Summary & Market Breakdown (Figma Matched)
-           ================================================================ */}
+        {/* Price summary and market prices */}
         <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] p-6 sm:p-7">
-          {/* Price Summary Section */}
+          {/* Price summary */}
           <section className="mb-8" aria-labelledby="price-summary-title">
             <h2
               id="price-summary-title"
@@ -231,7 +210,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {/* Minimum Price Card */}
               <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5">
                 <span className="text-xs text-slate-500 font-medium block mb-1">
                   সর্বনিম্ন দাম
@@ -244,7 +222,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </p>
               </div>
 
-              {/* Maximum Price Card */}
               <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5">
                 <span className="text-xs text-slate-500 font-medium block mb-1">
                   সর্বাধিক দাম
@@ -257,7 +234,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </p>
               </div>
 
-              {/* Average Price Card */}
               <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5">
                 <span className="text-xs text-slate-500 font-medium block mb-1">
                   গড় দাম
@@ -272,7 +248,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             </div>
           </section>
 
-          {/* Market Breakdown Table Section */}
+          {/* Market prices table */}
           <section aria-labelledby="markets-title">
             <h2
               id="markets-title"

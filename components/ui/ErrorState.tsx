@@ -1,21 +1,12 @@
 import React from "react";
 
-// ============================================================================
-// ErrorState Component
-// Displays a helpful Bengali error message when an API request fails,
-// with an optional Retry button so the user can re-fetch easily.
-// ============================================================================
+// Error state component with retry button
 
 interface ErrorStateProps {
-  // Main error title
   title?: string;
-  // Optional secondary description explaining the issue
   description?: string;
-  // Callback function to re-attempt fetching the data
   onRetry?: () => void;
-  // Text for the retry button
   retryText?: string;
-  // Optional extra CSS classes
   className?: string;
 }
 
@@ -31,12 +22,12 @@ export default function ErrorState({
       className={`bazar-card max-w-md mx-auto p-6 sm:p-8 text-center my-6 ${className}`}
       role="alert"
     >
-      {/* Error icon circle */}
+      {/* Error icon */}
       <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 text-2xl">
         ⚠️
       </div>
 
-      {/* Error title */}
+      {/* Title */}
       <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
         {title}
       </h3>
@@ -48,7 +39,7 @@ export default function ErrorState({
         </p>
       )}
 
-      {/* Retry action button */}
+      {/* Retry button */}
       {onRetry && (
         <button
           type="button"

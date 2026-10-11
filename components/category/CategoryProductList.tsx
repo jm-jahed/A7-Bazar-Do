@@ -6,16 +6,10 @@ import { toBanglaNumber } from "@/lib/utils";
 import ProductCard from "@/components/products/ProductCard";
 import EmptyState from "@/components/ui/EmptyState";
 
-// ============================================================================
-// CategoryProductList Component
-// Interactive client component for category listing with numeric sorting.
-// Supports sorting by: Default (ডিফল্ট), Price Low-to-High, and Price High-to-Low.
-// ============================================================================
+// Category product list with sorting
 
 interface CategoryProductListProps {
-  // Category information (name, icon, slug)
   category: Category;
-  // Products belonging to this category from real API
   products: Product[];
 }
 
@@ -25,33 +19,27 @@ export default function CategoryProductList({
 }: CategoryProductListProps) {
   const [sortOption, setSortOption] = useState<SortOption>("default");
 
-  // ==========================================================================
-  // Numeric Sorting Logic
-  // IMPORTANT: We sort using the actual raw numeric `product.today` value,
-  // NOT formatted Bengali display strings (e.g. "১৪৮ টাকা").
-  // ==========================================================================
+  // Sort products by price
   const sortedProducts = useMemo(() => {
     const list = [...products];
 
     if (sortOption === "price-low-to-high") {
-      // Sort ascending by price: lowest price first
+      // Lowest price first
       return list.sort((a, b) => a.today - b.today);
     }
 
     if (sortOption === "price-high-to-low") {
-      // Sort descending by price: highest price first
+      // Highest price first
       return list.sort((a, b) => b.today - a.today);
     }
 
-    // Default: preserve original API order
+    // Default order
     return list;
   }, [products, sortOption]);
 
   return (
     <div className="space-y-6">
-      {/* ====================================================================
-          1. Category Page Header Card (Figma Matched)
-         ==================================================================== */}
+      {/* Category header */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] p-6 sm:p-8">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-50 border border-slate-100/80 flex items-center justify-center text-2xl sm:text-3xl shrink-0 shadow-2xs">
@@ -70,15 +58,13 @@ export default function CategoryProductList({
         </div>
       </div>
 
-      {/* ====================================================================
-          2. Count & Sort Controls Bar
-         ==================================================================== */}
+      {/* Count and sort controls */}
       <div className="flex items-center justify-between gap-4 pt-1">
         <p className="text-xs sm:text-sm text-slate-500 font-medium">
           মোট {toBanglaNumber(products.length)}টি পণ্য দেখানো হচ্ছে
         </p>
 
-        {/* Sort Control Dropdown */}
+        {/* Sort dropdown */}
         {products.length > 0 && (
           <div className="flex items-center gap-2">
             <label
@@ -110,9 +96,7 @@ export default function CategoryProductList({
         )}
       </div>
 
-      {/* ====================================================================
-          3. Product Grid or Empty State
-         ==================================================================== */}
+      {/* Product grid or empty state */}
       {sortedProducts.length === 0 ? (
         <EmptyState
           title="এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি"

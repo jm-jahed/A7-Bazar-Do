@@ -1,28 +1,24 @@
-@import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
 
-/* ==========================================================================
-   Bazar Dor (বাজার দর) - Global Design System & Color Tokens
-   These variables define the warm, clean Bengali market theme.
-   ========================================================================== */
-
+/* Theme colors and variables */
 :root {
-  /* Background & Surface colors */
+  /* Background and card colors */
   --background: #f8faf9;
   --foreground: #0f172a;
   --card: #ffffff;
   --card-border: #e2e8f0;
 
-  /* Typography color tokens */
+  /* Text colors */
   --text-primary: #0f172a;
   --text-muted: #64748b;
 
-  /* Brand / Market Primary colors */
+  /* Brand green colors */
   --primary: #16a34a;
   --primary-hover: #15803d;
   --primary-light: #dcfce7;
 
-  /* Price Change Indicator Colors */
+  /* Price change colors */
   --positive: #16a34a;
   --positive-bg: #dcfce7;
   --negative: #dc2626;
@@ -30,15 +26,11 @@
   --neutral: #64748b;
   --neutral-bg: #f1f5f9;
 
-  /* Font variable */
+  /* Font */
   --font-sans: "Noto Sans Bengali", system-ui, -apple-system, sans-serif;
 }
 
-
-/* ==========================================================================
-   Base Elements & Global Reset
-   ========================================================================== */
-
+/* Base styles */
 html {
   font-family: var(--font-sans);
   scroll-behavior: smooth;
@@ -55,11 +47,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ==========================================================================
-   Reusable UI Utility Classes
-   ========================================================================== */
+/* Reusable utility classes */
 
-/* Main page container with responsive horizontal padding */
+/* Page container */
 .container-custom {
   width: 100%;
   max-width: 1200px;
@@ -83,7 +73,7 @@ body {
   }
 }
 
-/* Standard Market Card style */
+/* Card style */
 .bazar-card {
   background-color: var(--card);
   border: 1px solid var(--card-border);
@@ -96,7 +86,7 @@ body {
   box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
 }
 
-/* Primary Action Button */
+/* Primary button */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -121,7 +111,7 @@ body {
   outline-offset: 2px;
 }
 
-/* Outline Secondary Button */
+/* Secondary outline button */
 .btn-outline {
   display: inline-flex;
   align-items: center;
@@ -142,7 +132,7 @@ body {
   border-color: #cbd5e1;
 }
 
-/* Price Change Direction Badges */
+/* Price change badges */
 .badge-rise {
   display: inline-flex;
   align-items: center;
@@ -179,11 +169,7 @@ body {
   border-radius: 9999px;
 }
 
-/* ==========================================================================
-   Price Ticker / Marquee Animation
-   Smooth continuous scroll from right to left with pause on hover.
-   ========================================================================== */
-
+/* Scrolling ticker animation */
 @keyframes tickerMarquee {
   0% {
     transform: translateX(0%);

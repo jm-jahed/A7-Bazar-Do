@@ -2,12 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { getBanglaDate } from "@/lib/utils";
 
-// ============================================================================
-// Hero Component (Figma Matched)
-// Main banner section for the Bazar Dor homepage.
-// Enclosed white rounded card with date eyebrow, main heading, subtitle,
-// CTA button, and hero basket illustration.
-// ============================================================================
+// Hero banner section
 
 export default function Hero() {
   const banglaDate = getBanglaDate(new Date(), true);
@@ -17,11 +12,9 @@ export default function Hero() {
       <div className="container-custom">
         <div className="bg-white rounded-3xl border border-slate-200/80 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] p-6 sm:p-10 lg:p-12 overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            {/* ================================================================
-                LEFT: Text Content & Primary Action Button
-               ================================================================ */}
+            {/* Text content and button */}
             <div className="lg:col-span-7 flex flex-col items-start text-left">
-              {/* Eyebrow Date Badge */}
+              {/* Date badge */}
               <div
                 className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50/90 text-emerald-700 text-xs font-medium mb-3 sm:mb-4 border border-emerald-100"
                 suppressHydrationWarning
@@ -29,17 +22,17 @@ export default function Hero() {
                 <span>{banglaDate || "আজকের বাজার দর"}</span>
               </div>
 
-              {/* Main Hero Heading */}
+              {/* Main heading */}
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight sm:leading-snug mb-3">
                 আজকের বাজারের দাম এক নজরে
               </h1>
 
-              {/* Subtitle Description */}
+              {/* Subtitle */}
               <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mb-6 max-w-xl">
                 চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক বিস্তারিত, গড়, সর্বনিম্ন-সর্বোচ্চ এবং দামের পরিবর্তন এক জায়গায়।
               </p>
 
-              {/* CTA Button */}
+              {/* Button to scroll down to products */}
               <div>
                 <a
                   href="#সব-পণ্য"
@@ -50,9 +43,7 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* ================================================================
-                RIGHT: Hero Graphic Illustration
-               ================================================================ */}
+            {/* Right side banner image */}
             <div className="lg:col-span-5 flex items-center justify-center">
               <div className="relative w-full max-w-[240px] sm:max-w-[280px] lg:max-w-[320px]">
                 <Image

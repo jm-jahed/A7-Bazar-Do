@@ -4,18 +4,13 @@ import { Metadata } from "next";
 import { getCategories, getCategory, getProductsByCategory } from "@/lib/api";
 import CategoryProductList from "@/components/category/CategoryProductList";
 
-// ============================================================================
-// Dynamic Category Page: /category/[slug]
-// Server Component that fetches the category metadata and products from the API.
-// ============================================================================
+// Category page
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
 }
 
-/**
- * Pre-renders static paths for known categories at build time.
- */
+// Build static pages for categories
 export async function generateStaticParams() {
   try {
     const categories = await getCategories();
@@ -28,9 +23,7 @@ export async function generateStaticParams() {
   }
 }
 
-/**
- * Generates dynamic SEO meta tags based on the active category.
- */
+// Page metadata
 export async function generateMetadata({
   params,
 }: CategoryPageProps): Promise<Metadata> {
@@ -54,13 +47,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
 
-  // Fetch category info and products in parallel
+  // Fetch category and products
   const [category, products] = await Promise.all([
     getCategory(decodedSlug),
     getProductsByCategory(decodedSlug),
   ]);
 
-  // If the category does not exist in the API, return Next.js notFound()
+  // Return 404 if category does not exist
   if (!category) {
     notFound();
   }

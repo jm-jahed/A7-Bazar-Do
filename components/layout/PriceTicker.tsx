@@ -6,18 +6,14 @@ import { Product } from "@/lib/types";
 import { getProducts } from "@/lib/api";
 import { formatPrice, formatUnitBn, toBanglaNumber } from "@/lib/utils";
 
-// ============================================================================
-// PriceTicker Component
-// Infinite scrolling price marquee banner positioned under the category bar.
-// Displays live commodity prices, units, and price direction change indicators.
-// ============================================================================
+// Scrolling price ticker bar
 
 export default function PriceTicker() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasError, setHasError] = useState<boolean>(false);
 
-  // Fetch all products from the real API for the ticker stream
+  // Fetch products for the ticker
   useEffect(() => {
     async function loadTickerData() {
       try {
@@ -36,7 +32,7 @@ export default function PriceTicker() {
     loadTickerData();
   }, []);
 
-  // Duplicate items for seamless continuous looping in CSS marquee
+  // Duplicate list so the loop scrolls smoothly
   const tickerItems = products.length > 0 ? [...products, ...products] : [];
 
   return (
@@ -44,15 +40,15 @@ export default function PriceTicker() {
       className="bg-slate-100/90 border-b border-slate-200/80 text-slate-800 text-xs sm:text-sm h-10 sm:h-11 flex items-center overflow-hidden relative select-none"
       aria-label="বাজার দর লাইভ টিকার"
     >
-      {/* Left fixed badge label */}
+      {/* Live label badge */}
       <div className="shrink-0 z-10 bg-slate-900 text-white font-bold text-[11px] sm:text-xs px-2.5 sm:px-3.5 h-full flex items-center gap-1.5 shadow-sm">
         <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping inline-block" />
         <span>লাইভ দর</span>
       </div>
 
-      {/* Ticker Content Area */}
+      {/* Ticker items */}
       <div className="flex-1 overflow-hidden relative flex items-center h-full">
-        {/* Loading State */}
+        {/* Loading state */}
         {isLoading && (
           <div className="flex items-center gap-6 px-4 animate-pulse text-slate-400 text-xs">
             <span>তথ্য লোড হচ্ছে...</span>
@@ -62,21 +58,21 @@ export default function PriceTicker() {
           </div>
         )}
 
-        {/* Error State */}
+        {/* Error state */}
         {!isLoading && hasError && (
           <div className="px-4 text-xs text-rose-500 font-medium">
             টিকার তথ্য লোড করা যায়নি।
           </div>
         )}
 
-        {/* Empty State */}
+        {/* Empty state */}
         {!isLoading && !hasError && products.length === 0 && (
           <div className="px-4 text-xs text-slate-500 font-medium">
             বর্তমানে কোনো টিকার ডেটা পাওয়া যায়নি।
           </div>
         )}
 
-        {/* Real Product Ticker Stream */}
+        {/* Product items */}
         {!isLoading && !hasError && tickerItems.length > 0 && (
           <div className="animate-marquee flex items-center gap-6 sm:gap-8 px-4">
             {tickerItems.map((product, idx) => {
@@ -90,20 +86,16 @@ export default function PriceTicker() {
                   className="flex items-center gap-1.5 sm:gap-2 shrink-0 hover:text-emerald-700 transition-colors focus:outline-none focus-visible:underline"
                   tabIndex={0}
                 >
-                  {/* Product Emoji */}
                   <span className="text-sm sm:text-base">{product.image}</span>
 
-                  {/* Product Name */}
                   <span className="font-semibold text-slate-900">
                     {product.nameBn}
                   </span>
 
-                  {/* Price & Unit */}
                   <span className="text-slate-600 font-medium">
                     {formatPrice(product.today)} / {formatUnitBn(product.unit).replace("প্রতি ", "")}
                   </span>
 
-                  {/* Price Change Percentage */}
                   <span
                     className={`font-bold text-[11px] sm:text-xs px-1.5 py-0.5 rounded ${
                       isUp
@@ -119,7 +111,6 @@ export default function PriceTicker() {
                     {toBanglaNumber(product.change?.pct?.toFixed(1) || "০.০")}%
                   </span>
 
-                  {/* Dot separator */}
                   <span className="text-slate-300 ml-3">|</span>
                 </Link>
               );

@@ -6,11 +6,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 
-// ============================================================================
-// Profile Form Component (Client Component)
-// Implements Assignment Challenge C3: Update Information Feature.
-// Allows authenticated users to view their account info and update their name.
-// ============================================================================
+// Form to view user profile and update name
 
 interface ProfileFormProps {
   user: {
@@ -30,14 +26,14 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Handle name update submission using Better Auth's updateUser API
+  // Submit updated name
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage(null);
 
     const trimmedName = name.trim();
 
-    // 1. Validation: Name must not be empty
+    // Check if name is empty
     if (!trimmedName) {
       const err = "অনুগ্রহ করে আপনার নাম লিখুন। নাম ফাঁকা রাখা যাবে না।";
       setErrorMessage(err);
@@ -66,11 +62,11 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         return;
       }
 
-      // 2. Success feedback and local state update
+      // Update state and show success message
       setCurrentName(trimmedName);
       toast.success("আপনার নাম সফলভাবে আপডেট করা হয়েছে!");
 
-      // 3. Refresh Server Components and Navbar
+      // Refresh page
       router.refresh();
     } catch (err: unknown) {
       const msg =
@@ -86,7 +82,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
 
   const [isSigningOut, setIsSigningOut] = useState(false);
 
-  // Handle user sign-out action
+  // Sign out user
   const handleSignOut = async () => {
     if (isSigningOut) return;
 
@@ -115,13 +111,11 @@ export default function ProfileForm({ user }: ProfileFormProps) {
 
   return (
     <div className="space-y-6">
-      {/* ====================================================================
-          1. Profile Overview Card (Figma Matched)
-         ==================================================================== */}
+      {/* User profile card */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] p-6 sm:p-7">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            {/* Avatar Image or Fallback */}
+            {/* Avatar image */}
             {user.image ? (
               <Image
                 src={user.image}
@@ -137,7 +131,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
               </div>
             )}
 
-            {/* User Details */}
+            {/* User name and email */}
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-slate-900">
                 {currentName || "ব্যবহারকারী"}
@@ -148,7 +142,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
             </div>
           </div>
 
-          {/* Sign Out Button */}
+          {/* Sign out button */}
           <button
             type="button"
             onClick={handleSignOut}
@@ -161,15 +155,13 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         </div>
       </div>
 
-      {/* ====================================================================
-          2. Update Information Form (Challenge C3 / Figma Matched)
-         ==================================================================== */}
+      {/* Update name form */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] p-6 sm:p-7 space-y-4">
         <div>
           <h3 className="text-base font-bold text-slate-900">তথ্য</h3>
         </div>
 
-        {/* Error Banner */}
+        {/* Error message */}
         {errorMessage && (
           <div
             className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium"

@@ -1,14 +1,9 @@
 import React from "react";
 
-// ============================================================================
-// LoadingState Component
-// Displays a friendly Bengali loading spinner while data is being fetched.
-// ============================================================================
+// Loading spinner component
 
 interface LoadingStateProps {
-  // Optional custom loading message. Defaults to standard Bengali prompt.
   message?: string;
-  // Optional extra CSS classes for layout spacing
   className?: string;
 }
 
@@ -22,7 +17,7 @@ export default function LoadingState({
       role="status"
       aria-live="polite"
     >
-      {/* Animated spinning ring */}
+      {/* Spinner */}
       <div className="relative w-12 h-12 mb-4">
         <div className="w-12 h-12 rounded-full border-4 border-emerald-100 border-t-emerald-600 animate-spin" />
         <div className="absolute inset-0 flex items-center justify-center text-emerald-600 text-xs">
@@ -30,7 +25,7 @@ export default function LoadingState({
         </div>
       </div>
 
-      {/* Loading message */}
+      {/* Message */}
       <p className="text-slate-600 text-base font-medium">{message}</p>
       <span className="sr-only">লোড হচ্ছে...</span>
     </div>

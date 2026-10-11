@@ -1,11 +1,7 @@
 import React from "react";
 import EmptyState from "@/components/ui/EmptyState";
 
-// ============================================================================
-// Not Found Page (404)
-// Shown when a user navigates to an invalid category slug or unknown route.
-// Matches assignment requirement: friendly 404 + "হোম পেজে ফিরে যান" CTA button.
-// ============================================================================
+// 404 page for unknown routes
 
 export default function NotFound() {
   return (

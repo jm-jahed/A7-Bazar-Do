@@ -3,16 +3,10 @@ import Link from "next/link";
 import { Product } from "@/lib/types";
 import { formatPrice, formatUnitBn, formatPriceChange } from "@/lib/utils";
 
-// ============================================================================
-// ProductCard Component
-// Reusable commodity card matching the Figma design reference.
-// Shows product illustration, Bengali name, unit, today's price, and price change badge.
-// ============================================================================
+// Product card component
 
 interface ProductCardProps {
-  // Product item data from the real API
   product: Product;
-  // Optional extra CSS classes for layout spacing
   className?: string;
 }
 
@@ -29,7 +23,7 @@ export default function ProductCard({
       className={`bg-white rounded-2xl border border-slate-100/90 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-200 p-4 sm:p-5 flex flex-col justify-between transition-all group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${className}`}
       aria-label={`${product.nameBn} - ${formatPrice(product.today)}`}
     >
-      {/* Top Part: Emoji Icon Box on Left, Name & Unit on Right */}
+      {/* Product icon, name, and unit */}
       <div className="flex items-center gap-3.5 mb-4">
         {/* Product Illustration Box */}
         <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-50 border border-slate-100/80 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
@@ -49,7 +43,7 @@ export default function ProductCard({
         </div>
       </div>
 
-      {/* Price Row: Label, Value, and Price Change Badge */}
+      {/* Price and change badge */}
       <div className="pt-3 border-t border-slate-100/80 flex items-center justify-between gap-2">
         <div className="flex flex-col">
           <span className="text-[10px] sm:text-[11px] text-slate-400 font-medium leading-none mb-1">
@@ -60,7 +54,7 @@ export default function ProductCard({
           </span>
         </div>
 
-        {/* Direction Badge */}
+        {/* Badge */}
         <span
           className={`inline-flex items-center text-[11px] font-semibold px-2 py-0.5 rounded-full ${
             isUp

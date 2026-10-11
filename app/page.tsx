@@ -7,14 +7,7 @@ import EmptyState from "@/components/ui/EmptyState";
 import { getProducts } from "@/lib/api";
 import { Product } from "@/lib/types";
 
-// ============================================================================
-// Helper Calculations for Step 10 Sections
-// ============================================================================
-
-/**
- * Filters and sorts products whose prices have increased today.
- * Displays up to 6 products sorted from greatest percentage increase to smallest.
- */
+// Get top 6 products with price increase
 function getTopRisers(products: Product[]): Product[] {
   return products
     .filter(
@@ -26,10 +19,7 @@ function getTopRisers(products: Product[]): Product[] {
     .slice(0, 6);
 }
 
-/**
- * Filters and sorts products whose prices have decreased today.
- * Displays up to 6 products sorted from greatest percentage drop to smallest.
- */
+// Get top 6 products with price decrease
 function getTopFallers(products: Product[]): Product[] {
   return products
     .filter(
@@ -41,14 +31,7 @@ function getTopFallers(products: Product[]): Product[] {
     .slice(0, 6);
 }
 
-// ============================================================================
-// Home Product Sections (Server Component)
-// Fetches the real product list from the API once and feeds:
-// 1. Top Risers (আজ দাম বেড়েছে ▲)
-// 2. Top Fallers (আজ দাম কমেছে ▼)
-// 3. All Products (সব পণ্য)
-// ============================================================================
-
+// Product sections on home page
 async function HomeProductSections() {
   let products: Product[] | null = null;
   let hasError = false;
@@ -87,10 +70,7 @@ async function HomeProductSections() {
 
   return (
     <>
-      {/* ================================================================
-          Section A: Top Risers (▲ আজ দাম বেড়েছে)
-          Displays up to 6 rising products sorted by highest increase.
-         ================================================================ */}
+      {/* Top price risers */}
       {topRisers.length > 0 && (
         <section className="py-6 sm:py-8">
           <div className="container-custom">
@@ -112,10 +92,7 @@ async function HomeProductSections() {
         </section>
       )}
 
-      {/* ================================================================
-          Section B: Top Fallers (▼ আজ দাম কমেছে)
-          Displays up to 6 falling products sorted by greatest drop.
-         ================================================================ */}
+      {/* Top price fallers */}
       {topFallers.length > 0 && (
         <section className="py-6 sm:py-8">
           <div className="container-custom">
@@ -137,11 +114,7 @@ async function HomeProductSections() {
         </section>
       )}
 
-      {/* ================================================================
-          Section C: All Products (সব পণ্য)
-          Displays all commodities returned by the API in a responsive grid.
-          Anchor id="সব-পণ্য" enables smooth navigation from the Hero CTA.
-         ================================================================ */}
+      {/* All products */}
       <section id="সব-পণ্য" className="py-6 sm:py-8 scroll-mt-24">
         <div className="container-custom">
           <div className="mb-5">
@@ -164,10 +137,7 @@ async function HomeProductSections() {
   );
 }
 
-// ============================================================================
-// Skeleton Loader for Initial Suspense Fallback
-// ============================================================================
-
+// Loading skeletons for home sections
 function HomeSectionsSkeleton() {
   return (
     <div className="container-custom py-8 sm:py-10 space-y-10">
@@ -188,17 +158,14 @@ function HomeSectionsSkeleton() {
   );
 }
 
-// ============================================================================
-// Main Home Page Component
-// ============================================================================
-
+// Home page
 export default function Home() {
   return (
     <main className="flex-1">
-      {/* 1. Hero / Banner Section */}
+      {/* Hero banner */}
       <Hero />
 
-      {/* 2. Real API Product Sections (Top Risers, Top Fallers, All Products) */}
+      {/* Product sections */}
       <Suspense fallback={<HomeSectionsSkeleton />}>
         <HomeProductSections />
       </Suspense>

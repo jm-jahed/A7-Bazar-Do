@@ -23,18 +23,18 @@ export default function RootLayout({
   return (
     <html lang="bn">
       <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased">
-        {/* Global Toast Notifications */}
+        {/* Toast notifications */}
         <Toaster position="top-center" toastOptions={{ duration: 3500 }} />
 
-        {/* Global Header Navigation Structure */}
+        {/* Header navigation */}
         <Navbar />
         <CategoryNav />
         <PriceTicker />
 
-        {/* Page Content */}
+        {/* Page content */}
         <div className="flex-1 flex flex-col">{children}</div>
 
-        {/* Global Footer (Requirement 7) */}
+        {/* Footer */}
         <Footer />
       </body>
     </html>

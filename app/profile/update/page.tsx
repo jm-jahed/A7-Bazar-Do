@@ -6,11 +6,7 @@ import { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import ProfileForm from "@/components/profile/ProfileForm";
 
-// ============================================================================
-// Update Profile Route: /profile/update
-// Protected route implementing Challenge C3 dedicated update screen.
-// Verifies session server-side via Better Auth.
-// ============================================================================
+// Profile update page
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function UpdateProfilePage() {
-  // 1. Server-side session verification via Better Auth
+  // Check if user is logged in
   let session = null;
   try {
     session = await auth.api.getSession({
@@ -31,7 +27,7 @@ export default async function UpdateProfilePage() {
     session = null;
   }
 
-  // 2. Redirect unauthenticated visitors to sign in with safe callback URL
+  // Redirect to sign in if not logged in
   if (!session?.user) {
     redirect(`/signin?callbackURL=${encodeURIComponent("/profile/update")}`);
   }
@@ -39,7 +35,7 @@ export default async function UpdateProfilePage() {
   return (
     <main className="flex-1 py-8 sm:py-12 bg-slate-50">
       <div className="container-custom max-w-2xl">
-        {/* Breadcrumb Navigation */}
+        {/* Breadcrumb links */}
         <nav
           aria-label="Breadcrumb"
           className="flex items-center gap-1.5 text-xs text-slate-500 mb-6"
@@ -61,7 +57,7 @@ export default async function UpdateProfilePage() {
           <span className="text-slate-800 font-medium">তথ্য আপডেট</span>
         </nav>
 
-        {/* Page Header */}
+        {/* Header */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
             তথ্য আপডেট করুন
@@ -71,7 +67,7 @@ export default async function UpdateProfilePage() {
           </p>
         </div>
 
-        {/* Profile Update Form */}
+        {/* Update form */}
         <ProfileForm
           user={
             session?.user || {
